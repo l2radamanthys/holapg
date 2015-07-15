@@ -7,8 +7,6 @@
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 	<script type="text/javascript" charset="utf-8" src="scripts/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
-		document.addEventListener("deviceready", onDeviceReady, false);
-
 		function onDeviceReady() {
 			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);
 		}
@@ -30,6 +28,10 @@
 		function onGeoError(error) {
 			alert("codigo: " + error.code + "mensaje:" + error.message);			
 		}
+
+		$(document).ready(function() {
+			onDeviceReady();
+		});
 
 
 	</script>
