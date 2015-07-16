@@ -23,6 +23,7 @@
 		}
 
 		function obtainGPSEvt() {
+			$("#eventlog").append("Buscando Gps");
 			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);	
 		}
 		
@@ -40,14 +41,12 @@
 		*/
 		function onGeoError(error) {
 			var msj = "codigo: " + error.code + "mensaje:" + error.message;			
-			alert(msj);
-			//var error = $("#error");
-			//error.html(error.html() + msj);
+			alert(msj);			
+			$("#eventlog").append(msj);
 		}
 
 		$(document).ready(function() {
 			onLoad();
-
 			$("#gps-search-btn").click(function() { obtainGPSEvt(); return false; })
 		});
 
@@ -71,10 +70,10 @@
 				<input type="text" id="lng" name="" value=""> 
 			</p>
 			<p>
-				<a href="#" id="gps-search" class="btn btn-primary">Buscar GPS</a>
+				<a href="#" id="gps-search-btn" class="btn btn-primary">Buscar GPS</a>
 			</p>	
 
-			<div class="" id="error">
+			<div class="" id="eventlog">
 			</div>
 		</div>
 
