@@ -14,12 +14,9 @@
     <script src="/scripts/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
-		function onLoad() {
-            document.addEventListener("deviceready", initApp, false);
-        }
-
 		function initApp() {
 			//pass
+			$("#info").html("phonegap is running");
 		}
 
 
@@ -33,8 +30,9 @@
 		}
 
 
-		function onPhotoSuccess(imgData){					
+		function onPhotoSuccess(imageData) {					
 			var image = $("#photo");
+			image.attr("src", "data:image/jpeg;base64," + imageData)
 			$("#eventlog").append("Imagen Cargada con exito");
 		}
 
@@ -44,11 +42,18 @@
 		}
 
 
-		//$(document).ready(function() {
-		//	onLoad();
-			//$("#capture").click(function() { obtainGPSEvt(); return false; })
-		//});
-
+		$(document).ready(function() { 
+            $("#info").html("cargando phonegap...");
+            // jQuery is properly loaded at this point
+            // so proceed to bind the Cordova's deviceready event
+            $(document).bind('deviceready', function() {
+                // Now Cordova is loaded
+                // its great JS API can be used to access low-level
+                // features as accelerometer, contacts and so on
+            }); 
+            initApp();
+            $("#capture").click(function() { getPhoto(); return false; })
+        });
 
 	</script>
 
