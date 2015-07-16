@@ -32,6 +32,7 @@
 		Si se obtuvo el gps mostrar
 		*/
 		function onGeoSucccess(position) {
+			$("#eventlog").append("GPS encontrado");
 			var lat = $("#gps-lat").value(position.latitude);
 			var lng = $("#gps-lng").value(position.longitude);
 		}
