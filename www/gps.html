@@ -13,30 +13,41 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
-		function onDeviceReady() {
-			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);
+		function onLoad() {
+            document.addEventListener("deviceready", initApp, false);
+        }
+
+		function initApp() {
+			//pass
 		}
+
+		function obtainGPSEvt() {
+			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);	
+		}
+		
 
 		/*
 		Si se obtuvo el gps mostrar
 		*/
 		function onGeoSucccess(position) {
-			var elem = $("#gps-info");
-			elem.html(
-				"latitud: " + position.latitude + "<br>"
-				"longitud": + position.longitude
-			);
+			var lat = $("#gps-lat").value(position.latitude);
+			var lng = $("#gps-lng").value(position.longitude);
 		}
 
 		/*
 		En caso de error
 		*/
 		function onGeoError(error) {
-			alert("codigo: " + error.code + "mensaje:" + error.message);			
+			var msj = "codigo: " + error.code + "mensaje:" + error.message;			
+			alert(msj);
+			//var error = $("#error");
+			//error.html(error.html() + msj);
 		}
 
 		$(document).ready(function() {
-			onDeviceReady();
+			onLoad();
+
+			$("#gps-search-btn").click(function() { obtainGPSEvt(); return false; })
 		});
 
 
