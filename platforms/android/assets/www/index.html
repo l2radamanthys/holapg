@@ -7,24 +7,27 @@
     <title>Hola Mundo</title>    
     <link rel="stylesheet" href="styles/bootstrap.min.css">
  
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    <script src="scripts/jquery.js"></script>
+    <script src="scripts/jquery-2.1.4.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
     <script type="text/javascript">
-        function onLoad() {
-            document.addEventListener("deviceready", initApp, false);
-        }
-
         function initApp() {
-            alert("Phonegap Running");
+            $("#info").html("phonegap is running");
         }
 
-        $(document).ready(function() {
-            alert("cargando phonegap");
-            onLoad();
+        $(document).ready(function() { 
+            $("#info").html("cargando phonegap...");
+            // jQuery is properly loaded at this point
+            // so proceed to bind the Cordova's deviceready event
+            $(document).bind('deviceready', function() {
+                // Now Cordova is loaded
+                // its great JS API can be used to access low-level
+                // features as accelerometer, contacts and so on
+            }); 
+            initApp();
         });
-
+        
     </script>
 
   </head>
@@ -38,7 +41,7 @@
 
             <br>
             <br>
-            <p class="alert alert-info">cargando phonegap</p>
+            <p class="alert alert-info" id="info"></p>
         </div>        
     </body>
 </html>

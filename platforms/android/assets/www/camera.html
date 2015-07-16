@@ -24,14 +24,30 @@
 
 
 		function getPhoto() {
-
+			$("#eventlog").append("Cargando foto");
+			CameraOptions = {
+				quality: 50,				
+				destinationType: Camera.destinationType.DATA_URL, //retorna como string en base64
+			}
+			navigator.camera.getPicture(onPhotoSuccess, onPhotoFail, CameraOptions);
 		}
 
-		$(document).ready(function() {
-			onLoad();
 
+		function onPhotoSuccess(imgData){					
+			var image = $("#photo");
+			$("#eventlog").append("Imagen Cargada con exito");
+		}
+
+
+		function onPhotoFail(message) {
+			$("#eventlog").append("Error: " + message);
+		}
+
+
+		//$(document).ready(function() {
+		//	onLoad();
 			//$("#capture").click(function() { obtainGPSEvt(); return false; })
-		});
+		//});
 
 
 	</script>
@@ -48,7 +64,11 @@
 				<a href="#" id="capture" class="btn btn-primary">Tomar Foto</a>
 			</p>	
 
-			<div class="" id="error">
+			<br><br>
+			<img src="" id="photo">
+			<br><br>
+
+			<div class="" id="eventlog">
 			</div>
 		</div>
 
