@@ -1,36 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
 	<title>GPS test</title>
+	<link rel="stylesheet" href="styles/bootstrap.min.css">
+
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" charset="utf-8" src="scripts/jquery-2.1.4.min.js"></script>
+    
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+
 	<script type="text/javascript">
-		function onDeviceReady() {
-			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);
+		function onLoad() {
+            document.addEventListener("deviceready", initApp, false);
+        }
+
+		function initApp() {
+			//pass
 		}
+
+		function obtainGPSEvt() {
+			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);	
+		}
+		
 
 		/*
 		Si se obtuvo el gps mostrar
 		*/
 		function onGeoSucccess(position) {
-			var elem = $("#gps-info");
-			elem.html(
-				"latitud: " + position.latitude + "<br>"
-				"longitud": + position.longitude
-			);
+			var lat = $("#gps-lat").value(position.latitude);
+			var lng = $("#gps-lng").value(position.longitude);
 		}
 
 		/*
 		En caso de error
 		*/
 		function onGeoError(error) {
-			alert("codigo: " + error.code + "mensaje:" + error.message);			
+			var msj = "codigo: " + error.code + "mensaje:" + error.message;			
+			alert(msj);
+			//var error = $("#error");
+			//error.html(error.html() + msj);
 		}
 
 		$(document).ready(function() {
-			onDeviceReady();
+			onLoad();
+
+			$("#gps-search-btn").click(function() { obtainGPSEvt(); return false; })
 		});
 
 
@@ -39,9 +57,28 @@
 </head>
 
 <body>
-	<p id="gps-info">Buscando GPS...</p>
+	<section class="container">
+		<h1>GPS test</h1>
+		<br><br>
 
+		<div>
+			<p>
+				<label>Lat:</label>
+				<input type="text" id="lat" name="" value=""> 
+			</p>
+			<p>
+				<label>Lng:</label>
+				<input type="text" id="lng" name="" value=""> 
+			</p>
+			<p>
+				<a href="#" id="gps-search" class="btn btn-primary">Buscar GPS</a>
+			</p>	
 
+			<div class="" id="error">
+			</div>
+		</div>
+
+	</section>
 </body>
 
 </html>
