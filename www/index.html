@@ -1,47 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <title>Hola Mundo</title>    
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
- 
-    <script src="scripts/jquery-2.1.4.min.js"></script>
-    <script src="scripts/bootstrap.min.js"></script>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Test App</title>
+    <link rel="stylesheet" href="media/styles/jquery.mobile-1.4.5.min.css">
+
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.win7.js"></script>
+    <script src="media/scripts/jquery-1.11.3.min.js"></script>
+    <script src="media/scripts/jquery.mobile-1.4.5.min.js"></script>
+    <!-- script src="media/scripts/source.js"></script -->
 
     <script type="text/javascript">
-        function initApp() {
-            $("#info").html("phonegap is running");
+
+
+        // Camera event
+        function getPhoto() {
+            var cameraOptions = {
+                quality: 50,
+                destinationType: destinationType.DATA_URL
+            }
+            navigator.camera.getPicture(captureSuccess, captureError, cameraOptions);
         }
 
-        $(document).ready(function() { 
-            $("#info").html("cargando phonegap...");
-            // jQuery is properly loaded at this point
-            // so proceed to bind the Cordova's deviceready event
-            $(document).bind('deviceready', function() {
-                // Now Cordova is loaded
-                // its great JS API can be used to access low-level
-                // features as accelerometer, contacts and so on
-            }); 
-            initApp();
-        });
-        
+
+        function captureSuccess(imageData) {
+            navigator.notification.alert("captura de imagen exitosa");
+            $("#photo").attr("src", "data:image/jpeg;base64," + imageData);
+
+        }
+
+        function captureError(message) {
+            navigator.notification.alert("Error: " + message);
+        }
+
+
+        // On Init
+        function onDeviceReady() {
+            $("#photo-capture").bind("click", function() {
+                getPhoto();
+                return false;
+            });
+
+        }
+
+        $(document).bind("deviceready", onDeviceReady, false);
+
     </script>
 
-  </head>
-    <body>
-        <div class="container">
-            <h1>Phonegap + Cordova Test</h1>
-            <br><br>
-            
-            <a href="gps.html" class="btn btn-default">PROBAR GPS</a>
-            <a href="camera.html" class="btn btn-default">PROBAR CAMARA</a>
+</head>
+<body>
+    <!-- HOME -->
+    <div data-role="page" id="main-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
 
-            <br>
-            <br>
-            <p class="alert alert-info" id="info"></p>
-        </div>        
-    </body>
+            <h1>HOME</h1>
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+
+    <!-- GPS -->
+    <div data-role="page" id="gps-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
+            <h1>TEST GPS</h1>
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+    <!-- CAMARA -->
+    <div data-role="page" id="camera-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                &nbsp;
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
+            <h1>TEST CAMARA</h1>
+
+            <a href="#" id="photo-capture" class="ui-btn ui-corner-all ui-shadow">SACAR FOTO</a>
+
+            <img src="" id="photo">
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+</body>
 </html>
