@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, target-densitydpi=device-dpi" />
+
+    <title>Test App</title>
+    <link rel="stylesheet" href="media/styles/jquery.mobile-1.4.5.min.css">
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="media/scripts/jquery-1.11.3.min.js"></script>
+    <script src="media/scripts/jquery.mobile-1.4.5.min.js"></script>
+    <!-- script src="media/scripts/source.js"></script -->
+
+
+    <script type="text/javascript">
+        document.addEventListener("deviceready", onDeviceReady, false);
+        
+        // Camera event
+        function captureSuccess(imageData) {
+            $("#log").append("<br>photo ok");
+            var image = $("#photo");
+            //base64 
+            //image.attr("src", "data:image/jpeg;base64," + imageData);
+            //file
+            image.attr("src", imageData);
+        }
+
+        function captureFail(message) {
+            $("#log").append("<br>Foto Error:" + message);
+        }   
+
+        //mover la imagen
+        //revisar:
+        // http://stackoverflow.com/questions/14928202/save-image-in-local-storage-phonegap
+        function movePic(image) {
+            window.resolveLocalFileSystemURI(image, movePicSuccess, movePicError); 
+        }
+
+
+        function movePicSuccess() {
+
+        }
+
+        function movePicError() {
+
+        }
+
+
+        //gps eventos
+        function gpsSuccess(gpsData) {
+            $("#log").append("<br> GPS Ok");
+            alert(gpsData.coords.latitude, gpsData.coords.longitude);
+            $("#lat").val(gpsData.coords.latitude);
+            $("#lng").val(gpsData.coords.longitude);
+        }
+
+        function gpsFail(error) {
+            $("#log").append("<br>GPS Error[" + error.code + "]:"+ error.message);
+        }
+
+        //dispositivo listo, enlazar eventos
+        function onDeviceReady() {
+            alert("PhoneGap Cargado..");
+
+            //bind evt
+            $("#camera-shot").click(function() {
+                $("#log").append("<br>Sacar Foto (click evt)");
+                sessionStorage.removeItem('imagepath');
+                var photoOptions = { 
+                    quality: 50,
+                    //destinationType: Camera.DestinationType.DATA_URL, //base64
+                    destinationType: Camera.DestinationType.FILE_URI,  //file
+                };
+                navigator.camera.getPicture(captureSuccess, captureFail, photoOptions);
+                return false;
+            });         
+
+            $("#gps-capture").click(function() {
+                $("#log").append("<br>Obtener GPS (click evt)");
+                var gpsOptions = { 
+                    //enableHighAccuracy: true, 
+                    //maximumAge: 3000, 
+                    //timeout: 5000 
+                }
+                navigator.geolocation.getCurrentPosition(gpsSuccess, gpsFail, gpsOptions);
+                return false;
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <div data-role="page">
+        <div data-role="header">
+            <h1>Test Phonega Cordova</h1>
+        </div>
+
+        <div data-role="body">
+            <div>
+                <a href="#" id="camera-shot" data-theme="a" data-role="button">Sacar Foto</a>
+                <a href="#" id="gps-capture" data-role="button">Obtener Posicion GPS</a>
+            </div>
+            <div id="log">
+                APP Log
+            </div>
+            <br>
+            <br>
+            <div>
+                <p>Cordenadas GPS</p>
+                <label>Latitud:</label>
+                <input type="text" id="lat">
+                <label>Longitud:</label>
+                <input type="text" id="lng">
+            </div>
+            <br>
+            <div>
+                <img src="" id="photo" >
+            </div>
+        </div>
+</div>
+</body>
+</html>
