@@ -6,12 +6,12 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
 	<title>GPS test</title>
-	<link rel="stylesheet" href="/styles/bootstrap.min.css">
+	<link rel="stylesheet" href="styles/bootstrap.min.css">
 
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     
-    <script src="/scripts/jquery.js"></script>
-    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
 		function initApp() {
@@ -33,6 +33,7 @@
 		function onPhotoSuccess(imageData) {					
 			var image = $("#photo");
 			image.attr("src", "data:image/jpeg;base64," + imageData)
+			image.attr("style", "");
 			$("#eventlog").append("Imagen Cargada con exito");
 		}
 
@@ -70,7 +71,7 @@
 			</p>	
 
 			<br><br>
-			<img src="" id="photo">
+			<img src="" id="photo" style="display: none;">
 			<br><br>
 
 			<div class="" id="eventlog">
