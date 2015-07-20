@@ -1,0 +1,18 @@
+POST /ClienteSync.asmx HTTP/1.1
+Host: localhost
+Content-Type: application/soap+xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <SubirArchivo xmlns="http://tempuri.org/">
+      <_codFile>string</_codFile>
+      <_codEncuesta>string</_codEncuesta>
+      <_nameFile>string</_nameFile>
+      <_sync>string</_sync>
+      <_tipoMultimedia>string</_tipoMultimedia>
+      <_file>base64Binary</_file>
+    </SubirArchivo>
+  </soap12:Body>
+</soap12:Envelope>

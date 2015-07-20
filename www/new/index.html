@@ -9,14 +9,19 @@
 
     <title>Test App</title>
     <link rel="stylesheet" href="media/styles/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="media/styles/main-theme.css">
 
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script src="media/scripts/jquery-1.11.3.min.js"></script>
     <script src="media/scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="media/scripts/gmaps.js"></script>
+    <script src="media/scripts/jquery.soap.js"></script>
     <!-- script src="media/scripts/source.js"></script -->
 
 
     <script type="text/javascript">
+        var map;
         document.addEventListener("deviceready", onDeviceReady, false);
         
         // Camera event
@@ -25,8 +30,9 @@
             var image = $("#photo");
             //base64 
             //image.attr("src", "data:image/jpeg;base64," + imageData);
-            //file
+            //to file
             image.attr("src", imageData);
+            image.css("display", "block");
         }
 
         function captureFail(message) {
@@ -42,20 +48,151 @@
 
 
         function movePicSuccess() {
-
+            //pass dont implement
         }
 
         function movePicError() {
+            //pass dont implement
+        }
 
+
+        //convert image src to base64
+        function convertImageToBase64(path) {
+            $("#log").append("<br>img-upl: " + path);
+            var img = new Image();
+            img.src = path;
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            $("#log").append("<br>img-upl: base64 generated");
+            return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");            
+        }
+
+
+        function createTag(key, value) {
+            return "<" + key + ">" + value + "</" + key + ">";
+        }
+
+        function uploadImageData(base64Image)
+        {
+            var data_ = {
+                _codFile: '1', //campos de bd no tener en cuenta
+                _codEncuesta: '1', //campos de bd no tener en cuenta
+                _nameFile: 'sample-image.jpg',
+                _sync: '1', //campos de bd no tener en cuenta
+                _tipoMultimedia: 'IMG/JPG', //campos de bd no tener en cuenta                    
+                _tecnologia : 'N/A', //campos de bd no tener en cuenta
+                _formulario: '1', //campos de bd no tener en cuenta 
+                _versionForm: '0.1', //campos de bd no tener en cuenta 
+                _tipoArchivo: 'N/A', //campos de bd no tener en cuenta                    
+                _file: base64Image,                                                                            
+            };
+
+            var xmlHeader = '<?xml version="1.0" encoding="utf-8"?>' 
+                    + '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">'
+                    + '<soap12:Body>'
+                    + '<UploadFile xmlns="http://tempuri.org/">';
+
+            var xmlContent = "";
+            for (var key in data_) {
+                xmlContent = xmlContent + createTag(key, data_[key]);
+            }
+
+            var xmlFooter = '</UploadFile></soap12:Body></soap12:Envelope>';         
+            var xmlData = xmlHeader + xmlContent + xmlFooter;
+
+            
+            $.ajax({
+                url: 'http://localhost:51359/ClienteSync.asmx/UploadFile', 
+                type: "POST",
+                dataType: "xml", 
+                data: xmlData, 
+                contentType: "text/xml; charset=\"utf-8\"",
+                success: function(jqXHR) {
+                    //pass
+                }, 
+                error: function(jqXHR, message, error) {
+                    alert(message + error);
+                }
+            });
+
+            /*
+            $.soap({
+                url: 'http://localhost:51359/ClienteSync.asmx?op=UploadFile', 
+                //method: 'UploadFile',
+                data: data_,
+                crossDomain: true,
+
+                beforeSend: function (Response) {
+                    //$("#log").append("<br> Sending: " + Response);                     
+                    $("#log").append("<br> Sending: ");
+                },
+
+                success: function (Response) {
+                    $("#log").append("<br> upload OK: " + Response);                     
+                },
+
+                error: function (Response) {
+                    //pass
+                    $("#log").append("<br> upload ERROR: " + Response);
+                    //$("#log").append("<br> upload ERROR: " + error + " THROW:" + throw);
+                }
+            });
+            /* */
+            /*
+            var request = $.ajax({
+                type: "POST",
+                //url: 'http://localhost:51359/ClienteSync.asmx/UploadFile',
+                url: 'http://localhost:51359/ClienteSync.asmx?op=UploadFile', 
+                cache: false,
+                contentType: "application/x-www-form-urlencoded",
+                data: data_,                
+            });
+
+            request.then(function(data, textStatus, jqXHR) {
+                $("#log").append("enviando...");
+            });
+
+            request.done(function(jqXHR) {
+                $("#log").append("<br> upload ok");
+            });
+
+            request.fail(function(jqXHR, message, error) {
+                $("#log").append("<br>upload error");
+                $("#log").append("<br>E: " + message + " T:" + error);
+
+            });
+            /* */
         }
 
 
         //gps eventos
         function gpsSuccess(gpsData) {
             $("#log").append("<br> GPS Ok");
-            alert(gpsData.coords.latitude, gpsData.coords.longitude);
+            $("#log").append("<br> GPS:" + gpsData.coords.latitude + " " +  gpsData.coords.longitude);        
             $("#lat").val(gpsData.coords.latitude);
             $("#lng").val(gpsData.coords.longitude);
+            //agrega marca al map y centra                    
+            map = GMaps({
+                div: '#map-canvas',                
+                lat: gpsData.coords.latitude,
+                lng: gpsData.coords.longitude,
+                markers: [
+                    {
+                        lat: gpsData.coords.latitude,
+                        lng: gpsData.coords.longitude,
+                    },
+                ],
+            });   
+            map.addMarker({
+                lat: gpsData.coords.latitude,
+                lng: gpsData.coords.longitude,
+                title: "usted esta aqui",
+            });
+
         }
 
         function gpsFail(error) {
@@ -63,8 +200,13 @@
         }
 
         //dispositivo listo, enlazar eventos
-        function onDeviceReady() {
-            alert("PhoneGap Cargado..");
+        function onDeviceReady() {            
+            //create map
+            map = GMaps({
+                div: '#map-canvas',                
+                lat: -24.7960848,
+                lng: -65.4306287
+            });
 
             //bind evt
             $("#camera-shot").click(function() {
@@ -72,7 +214,7 @@
                 sessionStorage.removeItem('imagepath');
                 var photoOptions = { 
                     quality: 50,
-                    //destinationType: Camera.DestinationType.DATA_URL, //base64
+                    //destinationType:Camera. DestinationType.DATA_URL, //base64
                     destinationType: Camera.DestinationType.FILE_URI,  //file
                 };
                 navigator.camera.getPicture(captureSuccess, captureFail, photoOptions);
@@ -89,7 +231,25 @@
                 navigator.geolocation.getCurrentPosition(gpsSuccess, gpsFail, gpsOptions);
                 return false;
             });
+
+            $("#upload-image").click(function() {
+                //convert image to base64
+                $("#log").append("<br>Subir Imagen (click evt)");
+                var path = $("#photo").attr("src");
+                var base64Image = convertImageToBase64(path);
+                //$("#base64").html(base64Image);
+                //generate soap and send
+                uploadImageData(base64Image);
+                return false;
+            });
+
         }
+
+        //debug only
+        //*
+        $(document).ready(function() { 
+            onDeviceReady(); 
+        }); /* */
     </script>
 
 </head>
@@ -101,8 +261,9 @@
 
         <div data-role="body">
             <div>
-                <a href="#" id="camera-shot" data-theme="a" data-role="button">Sacar Foto</a>
+                <a href="#" id="camera-shot" data-role="button">Sacar Foto</a>
                 <a href="#" id="gps-capture" data-role="button">Obtener Posicion GPS</a>
+                <a href="#" id="upload-image" data-role="button">Subir Image Servidor</a>
             </div>
             <div id="log">
                 APP Log
@@ -110,16 +271,21 @@
             <br>
             <br>
             <div>
-                <p>Cordenadas GPS</p>
+                <h2>Cordenadas GPS</h2>
                 <label>Latitud:</label>
                 <input type="text" id="lat">
                 <label>Longitud:</label>
                 <input type="text" id="lng">
+                <br>
+                <div id="map-canvas"></div>
             </div>
-            <br>
+            <br>        
             <div>
-                <img src="" id="photo" >
+                <h2>Foto:</h2>
+                <img src="media/images/default.jpg" id="photo" >
             </div>
+
+            <div id="base64"></div>
         </div>
 </div>
 </body>
