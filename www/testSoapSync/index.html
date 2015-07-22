@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>SOAP Test</title>
+	<link rel="stylesheet" href="media/styles/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="media/styles/main-theme.css">
+
+	<script src="media/scripts/jquery-1.11.3.min.js"></script>
+	<script src="media/scripts/jquery.mobile-1.4.5.min.js"></script>
+	<script src="media/scripts/jquery.soap.js"></script>
+	<script src="media/scripts/source.js"></script>
+
+
+	<script type="text/javascript">	
+		$(document).ready(function() {
+			$.support.cors = true;
+			$("#send").click(function() {
+				console.log("send...");
+				$.soap({
+					url: server_address + "/server.php/",
+					method: "getHelloWorld",
+					crossDomain: true,
+					data: {
+        				"name": 'ricardo',
+        			},
+        			success: function (SOAPResponse) {
+        				data = SOAPResponse.toString();
+        				$("#result").html(data);
+    				},
+    				error: function (SOAPResponse) {
+        				alert(SOAPResponse);    				      
+    				},
+				});
+				return false;
+			});
+			
+
+			$("#send-image").click(function() {
+				console.log("send image");
+				var path = $("#photo").attr("src");
+				var base64Image = convertImageToBase64(path);
+				$("#result").html(base64Image);
+				$.soap({
+					url: server_address + "/server.php/",
+					method: "uploadFile",
+					crossDomain: true,
+					data: {
+        				"name": 'default.jpg',
+        				"data": base64Image,
+        			},
+        			success: function (SOAPResponse) {
+        				data = SOAPResponse.toString();
+        				$("#result").html(data);
+    				},
+    				error: function (SOAPResponse) {
+        				data = SOAPResponse.toString();
+        				$("#result").html(data);   				      
+    				},
+				});
+				return false;
+			});
+
+			$("#clear").click(function() {
+				console.log("clear content");
+				$("#result").html("");
+				return false;
+			});
+		});
+
+	</script>
+
+</head>
+<body>
+	<a href="#" id="send" data-role="button">SEND DATA</a>
+	<a href="#" id="send-image" data-role="button" >SEND IMAGE</a>
+	<a href="#" id="clear" data-role="button" >CLEAR</a>
+	<div id="result"></div>
+	<img src="media/images/default.jpg" id="photo" style="width: 10%; padding: 10%;">
+
+	
+
+</body>
+</html>

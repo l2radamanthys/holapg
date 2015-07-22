@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Test App</title>
+    <link rel="stylesheet" href="media/styles/jquery.mobile-1.4.5.min.css">
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.win7.js"></script>
+    <script src="media/scripts/jquery-1.11.3.min.js"></script>
+    <script src="media/scripts/jquery.mobile-1.4.5.min.js"></script>
+    <!-- script src="media/scripts/source.js"></script -->
+
+    <script type="text/javascript">
+
+
+        // Camera event
+        function getPhoto() {
+            var cameraOptions = {
+                quality: 50,
+                destinationType: destinationType.DATA_URL
+            }
+            navigator.camera.getPicture(captureSuccess, captureError, cameraOptions);
+        }
+
+
+        function captureSuccess(imageData) {
+            navigator.notification.alert("captura de imagen exitosa");
+            $("#photo").attr("src", "data:image/jpeg;base64," + imageData);
+
+        }
+
+        function captureError(message) {
+            navigator.notification.alert("Error: " + message);
+        }
+
+
+        // On Init
+        function onDeviceReady() {
+            $("#photo-capture").bind("click", function() {
+                getPhoto();
+                return false;
+            });
+        }
+
+        $(document).bind("deviceready", onDeviceReady, false);
+
+    </script>
+
+</head>
+<body>
+    <!-- HOME -->
+    <div data-role="page" id="main-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
+
+            <h1>HOME</h1>
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+
+    <!-- GPS -->
+    <div data-role="page" id="gps-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
+            <h1>TEST GPS</h1>
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+    <!-- CAMARA -->
+    <div data-role="page" id="camera-page">
+        <div data-role="header" id="main-page">
+            <h1>PhoneGap Test</h1>
+        </div>
+        <div data-role="main">
+            <div>
+                &nbsp;
+                <a href="#main-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">HOME</a>
+                <a href="#gps-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">GPS</a>
+                <a href="#camera-page" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">CAMARA</a>
+            </div>
+            <h1>TEST CAMARA</h1>
+
+            <a href="#" id="photo-capture" class="ui-btn ui-corner-all ui-shadow">SACAR FOTO</a>
+
+            <img src="" id="photo">
+
+        </div>
+
+        <div data-role="footer">
+            <h1>Pie de Pagina</h1>
+        </div>
+    </div>
+
+</body>
+</html>

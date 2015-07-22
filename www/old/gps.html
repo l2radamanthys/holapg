@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+	<title>GPS test</title>
+	<link rel="stylesheet" href="styles/bootstrap.min.css">
+
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		function initApp() {
+			//pass
+			$("#info").html("phonegap is running");
+		}
+
+		function obtainGPSEvt() {
+			$("#eventlog").append("Buscando Gps");
+			navigator.geolocation.getCurrrentPosition(onGeoSuccess, onGeoError);	
+		}
+		
+		/*
+		Si se obtuvo el gps mostrar
+		*/
+		function onGeoSuccess(position) {
+			$("#eventlog").append("GPS encontrado");
+			var lat = $("#gps-lat").value(position.latitude);
+			var lng = $("#gps-lng").value(position.longitude);
+		}
+
+		/*
+		En caso de error
+		*/
+		function onGeoError(error) {
+			var msj = "codigo: " + error.code + "mensaje:" + error.message;			
+			alert(msj);			
+			$("#eventlog").append(msj);
+		}
+
+		$(document).ready(function() { 
+            $("#info").html("cargando phonegap...");
+            // jQuery is properly loaded at this point
+            // so proceed to bind the Cordova's deviceready event
+            $(document).bind('deviceready', function() {
+                // Now Cordova is loaded
+                // its great JS API can be used to access low-level
+                // features as accelerometer, contacts and so on
+            }); 
+            initApp();
+            $("#gps-search-btn").click(function() { obtainGPSEvt(); return false; })
+        });
+
+
+	</script>
+
+</head>
+
+<body>
+	<section class="container">
+		<h1>GPS test</h1>
+		<br><br>
+
+		<div>
+			<p>
+				<label>Lat:</label>
+				<input type="text" id="lat" name="" value=""> 
+			</p>
+			<p>
+				<label>Lng:</label>
+				<input type="text" id="lng" name="" value=""> 
+			</p>
+			<p>
+				<a href="#" id="gps-search-btn" class="btn btn-primary">Buscar GPS</a>
+			</p>	
+
+			<div class="" id="eventlog">
+			</div>
+		</div>
+
+	</section>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+#photo, #map-canvas, #log {
+	widtH: 90%;
+	margin: 5%;
+}
+
+#log {
+	font-size: 10pt; 
+	width: 80%;
+	min-height: 100px;	
+	padding: 5%;
+	border: 1px solid #111;
+
+}
+
+#photo {
+	//display: None;
+}
+
+#map-canvas {
+	min-height: 300px;
+}
