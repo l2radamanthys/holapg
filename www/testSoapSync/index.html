@@ -14,22 +14,21 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$.support.cors = true;
+			$.support.cors = true; //enable global AJAX CORS o cross domain site request
 			$("#send").click(function() {
 				console.log("send...");
 				$.soap({
 					url: server_address,
 					method: "getHelloWorld",
-					//crossDomain: true,
 					data: {
         				"name": 'ricardo',
         			},
         			success: function (SOAPResponse) {
         				data = SOAPResponse.toString();
-        				$("#result").html(data);
+        				console.log(data);
     				},
     				error: function (SOAPResponse) {
-        				alert(SOAPResponse);
+        				console.log(SOAPResponse.toString());
     				},
 				});
 				return false;
@@ -42,28 +41,21 @@
 				var base64Image = convertImageToBase64(path);
 				$("#result").html(base64Image);
 				$.soap({
-					url: server_address + "/server.php?wdsl",
+					url: server_address,
 					method: "uploadFile",
-					crossDomain: true,
 					data: {
         				"name": 'default.jpg',
         				"data": base64Image,
         			},
         			success: function (SOAPResponse) {
         				data = SOAPResponse.toString();
-        				$("#result").html(data);
+        				console.log(data);
     				},
     				error: function (SOAPResponse) {
         				data = SOAPResponse.toString();
-        				$("#result").html(data);
+        				console.log(data);
     				},
 				});
-				return false;
-			});
-
-			$("#clear").click(function() {
-				console.log("clear content");
-				$("#result").html("");
 				return false;
 			});
 		});
@@ -76,12 +68,8 @@
         <div style="width: 90%; padding: 0 5% 0 5%;">
     	   <a href="#" id="send" data-role="button">SEND DATA</a>
     	   <a href="#" id="send-image" data-role="button" >SEND IMAGE</a>
-    	   <a href="#" id="clear" data-role="button" >CLEAR</a>
         </div>
-    	<div id="result" style="font-size: 9pt;"></div>
     	<img src="media/images/photo2.jpg" id="photo" style="width: 80%; padding: 10%;">
     </div>
-
-
 </body>
 </html>
