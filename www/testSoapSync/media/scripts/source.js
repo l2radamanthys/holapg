@@ -5,8 +5,10 @@
 
 //ruta del servidor soap con el que se conectara la APP
 //requiere que el servidor tenga habilitado CORS
-var server_address = "http://:127.0.0.1:90/test";
-
+//MPI
+//var server_address = "http://:127.0.0.1:90/test";
+//local
+var server_address = "http://127.0.0.1/proyectos/SimpleSOAPServer/server.php?wsdl";
 
 
 // Crea un tag xml del tipo <field>value</field>
@@ -24,7 +26,8 @@ function makeSOAPMessage(content) {
 
 
 
-//convierte una imagen a string formateado en base64
+//Convierte una imagen a string formateado en base64
+// @path string: ruta donde esta almacenada la imagen
 function convertImageToBase64(path) {
     console.log("<br>img-upl: " + path);
     var img = new Image();
@@ -35,12 +38,11 @@ function convertImageToBase64(path) {
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
     var dataURL = canvas.toDataURL("image/png");
-    $("#log").append("<br>img-upl: base64 generated");
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");            
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
 
 
 
 function convertFileToBase64() {
-	//pass 
+	//pass
 }

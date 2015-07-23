@@ -12,15 +12,15 @@
 	<script src="media/scripts/source.js"></script>
 
 
-	<script type="text/javascript">	
+	<script type="text/javascript">
 		$(document).ready(function() {
 			$.support.cors = true;
 			$("#send").click(function() {
 				console.log("send...");
 				$.soap({
-					url: server_address + "/server.php/",
+					url: server_address,
 					method: "getHelloWorld",
-					crossDomain: true,
+					//crossDomain: true,
 					data: {
         				"name": 'ricardo',
         			},
@@ -29,12 +29,12 @@
         				$("#result").html(data);
     				},
     				error: function (SOAPResponse) {
-        				alert(SOAPResponse);    				      
+        				alert(SOAPResponse);
     				},
 				});
 				return false;
 			});
-			
+
 
 			$("#send-image").click(function() {
 				console.log("send image");
@@ -42,7 +42,7 @@
 				var base64Image = convertImageToBase64(path);
 				$("#result").html(base64Image);
 				$.soap({
-					url: server_address + "/server.php/",
+					url: server_address + "/server.php?wdsl",
 					method: "uploadFile",
 					crossDomain: true,
 					data: {
@@ -55,7 +55,7 @@
     				},
     				error: function (SOAPResponse) {
         				data = SOAPResponse.toString();
-        				$("#result").html(data);   				      
+        				$("#result").html(data);
     				},
 				});
 				return false;
@@ -72,13 +72,16 @@
 
 </head>
 <body>
-	<a href="#" id="send" data-role="button">SEND DATA</a>
-	<a href="#" id="send-image" data-role="button" >SEND IMAGE</a>
-	<a href="#" id="clear" data-role="button" >CLEAR</a>
-	<div id="result"></div>
-	<img src="media/images/default.jpg" id="photo" style="width: 10%; padding: 10%;">
+    <div data-role="page">
+        <div style="width: 90%; padding: 0 5% 0 5%;">
+    	   <a href="#" id="send" data-role="button">SEND DATA</a>
+    	   <a href="#" id="send-image" data-role="button" >SEND IMAGE</a>
+    	   <a href="#" id="clear" data-role="button" >CLEAR</a>
+        </div>
+    	<div id="result" style="font-size: 9pt;"></div>
+    	<img src="media/images/photo2.jpg" id="photo" style="width: 80%; padding: 10%;">
+    </div>
 
-	
 
 </body>
 </html>
